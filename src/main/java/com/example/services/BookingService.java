@@ -19,19 +19,11 @@ public class BookingService implements IBookingService {
     public void start() {
         Integer option = menuService.showMenu();
 
-        while (option != 5) {
+        while (option != 4) {
             switch (option) {
-                case 1:
-                    // TODO: Ver listado de alojamientos
-                    break;
-                case 2:
-                    // TODO: Reservar alojamiento
-                    break;
-                case 3:
-                    // TODO: Ver reservas
-                    break;
-                case 4:
-                    // TODO: Ver listado de servicios
+                case 1 -> createBooking();
+                case 2 -> updateBooking();
+                case 3: cancelBooking();
                     break;
             }
             option = menuService.showMenu();

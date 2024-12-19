@@ -29,7 +29,6 @@ public class Database {
 
     private void initialize() {
         accommodations = Arrays.asList(
-
                 new Stay("Hotel Palermo Deluxe", 4.8f, "Buenos Aires", "Lujoso hotel en el corazón de Palermo", Arrays.asList(
                         new Room("Suite", "Habitación de lujo con jacuzzi", 5, "Suite", 250.0f),
                         new Room("Doble", "Habitación doble con balcón", 10, "Doble", 180.0f),
@@ -204,7 +203,6 @@ public class Database {
                         new Room("Familiar", "Espacio amplio para familias", 5, "Familiar", 290.0f),
                         new Room("Deluxe", "Apartamento premium con jacuzzi", 2, "Deluxe", 420.0f)),
                         280.0f, AccommodationType.APARTMENT)
-
                 );
     }
 }

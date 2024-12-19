@@ -15,19 +15,17 @@ public class MenuService implements IMenuService {
 
 
     public Integer showMenu() {
-        // Armar menu y mostrar en un sout
         System.out.println(
                 "¡Bienvenido a HotelApp! \n" +
                         " Por favor, elija una opción: \n" +
-                        " 1. Ver listado de alojamientos \n" +
-                        " 2. Reservar alojamiento \n" +
-                        " 3. Ver reservas \n" +
-                        " 4. Ver listado de servicios \n" +
-                        " 5. Salir");
+                        " 1. Crear una reserva \n" +
+                        " 2. Actualizar una reserva \n" +
+                        " 3. Cancelar una reserva \n" +
+                        " 4. Salir");
 
         Integer option = validatorService.readInt("Por favor, elija una opción:");
 
-        List<Integer> validOptions = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> validOptions = Arrays.asList(1, 2, 3, 4);
 
         if (!validOptions.contains(option)) {
             System.out.println("La opción ingresada no es válida. Por favor, elija una opción válida.");
