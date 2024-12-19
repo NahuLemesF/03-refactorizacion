@@ -11,13 +11,11 @@ public class Details {
 
     public Details(
         LocalDate startDate,
-        AccommodationType accommodationType,
         Integer childrenQuantity,
         Integer adultsQuantity,
         String city
     ) {
         this.startDate = startDate;
-        this.accommodationType = accommodationType;
         this.childrenQuantity = childrenQuantity;
         this.adultsQuantity = adultsQuantity;
         this.city = city;
@@ -29,14 +27,6 @@ public class Details {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
-    }
-
-    public AccommodationType getAccommodationType() {
-        return accommodationType;
-    }
-
-    public void setAccommodationType(AccommodationType accommodationType) {
-        this.accommodationType = accommodationType;
     }
 
     public Integer getChildrenQuantity() {
@@ -53,5 +43,13 @@ public class Details {
 
     public void setAdultsQuantity(Integer adultsQuantity) {
         this.adultsQuantity = adultsQuantity;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }
