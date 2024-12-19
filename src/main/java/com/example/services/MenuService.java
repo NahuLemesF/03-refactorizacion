@@ -18,7 +18,7 @@ public class MenuService implements IMenuService {
         System.out.println(
                 "¡Bienvenido a HotelApp! \n" +
                         " Por favor, elija una opción: \n" +
-                        " 1. Crear una reserva \n" +
+                        " 1. Buscar alojamientos \n" +
                         " 2. Actualizar una reserva \n" +
                         " 3. Cancelar una reserva \n" +
                         " 4. Salir");

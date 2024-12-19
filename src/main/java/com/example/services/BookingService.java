@@ -10,7 +10,7 @@ public class BookingService implements IBookingService {
     private final Database database;
     private final IMenuService menuService;
 
-    public BookingService(Database database, IMenuService menuService) {
+    public BookingService(Database database, IMenuService menuService, BookingCreation bookingCreation) {
         this.database = database;
         this.menuService = menuService;
     }
@@ -21,7 +21,7 @@ public class BookingService implements IBookingService {
 
         while (option != 4) {
             switch (option) {
-                case 1 -> createBooking();
+                case 1 -> ;
                 case 2 -> updateBooking();
                 case 3: cancelBooking();
                     break;
