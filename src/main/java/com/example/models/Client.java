@@ -1,10 +1,12 @@
 package com.example.models;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Client {
     private String firstName;
     private String lastName;
+    private LocalDate birthDate;
     private String phoneNumber;
     private String nationality;
     private LocalTime arrivalTime;
@@ -13,6 +15,7 @@ public class Client {
     public Client(
         String firstName,
         String lastName,
+        LocalDate birthDate,
         String phoneNumber,
         String nationality,
         LocalTime arrivalTime,
@@ -20,6 +23,7 @@ public class Client {
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.nationality = nationality;
         this.arrivalTime = arrivalTime;
@@ -40,6 +44,14 @@ public class Client {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getPhoneNumber() {
