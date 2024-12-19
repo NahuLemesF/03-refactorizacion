@@ -8,8 +8,9 @@ import java.util.List;
 
 public class Database {
     private static Database instance;
-    private List<Accommodation> accommodations;
-    private final List<Booking> bookings = new ArrayList<>();
+    private static List<Stay> listStay;
+    private static List<DayPass> listDaypass;
+    private static List<Booking> listBooking = new ArrayList<>();
 
     private Database() {
         initialize();
@@ -23,12 +24,16 @@ public class Database {
         return instance;
     }
 
-    public List<Accommodation> getAccommodations() {
-        return accommodations;
+    public static List<Stay> getStays() {
+        return listStay;
+    }
+
+    public static List<DayPass> getDaypass() {
+        return listDaypass;
     }
 
     private void initialize() {
-        accommodations = Arrays.asList(
+        listStay = Arrays.asList(
                 new Stay("Hotel Palermo Deluxe", 4.8f, "Buenos Aires", "Lujoso hotel en el corazón de Palermo", Arrays.asList(
                         new Room("Suite", "Habitación de lujo con jacuzzi", 5, "Suite", 250.0f),
                         new Room("Doble", "Habitación doble con balcón", 10, "Doble", 180.0f),
@@ -204,6 +209,86 @@ public class Database {
                         new Room("Deluxe", "Apartamento premium con jacuzzi", 2, "Deluxe", 420.0f)),
                         280.0f, AccommodationType.APARTMENT)
                 );
+        listDaypass = Arrays.asList(
+                new DayPass("DayPass Hotel Palermo Deluxe", 4.8f, "Buenos Aires", "Disfruta de las instalaciones del Hotel Palermo Deluxe con piscina y spa",
+                        Arrays.asList(
+                                new Service("Piscina", "Acceso a una piscina amplia y climatizada"),
+                                new Service("Spa", "Relájate en el spa con sauna y masajes"),
+                                new Service("Restaurante", "Menú buffet con variedad de platos"),
+                                new Service("Gimnasio", "Acceso al gimnasio con entrenador personal"),
+                                new Service("Bar", "Cócteles y bebidas en el bar de la piscina")
+                        ),
+                        150.0f),
+                new DayPass("DayPass Apartment Plaza San Martín", 4.6f, "Buenos Aires", "Día de relax en los apartamentos Plaza San Martín con jacuzzi y terraza",
+                        Arrays.asList(
+                                new Service("Jacuzzi", "Acceso al jacuzzi privado en la terraza"),
+                                new Service("Terraza", "Disfruta de la terraza con vistas panorámicas"),
+                                new Service("Café", "Café y snacks incluidos durante el día"),
+                                new Service("Zona de lectura", "Espacio tranquilo para leer y descansar"),
+                                new Service("Bar", "Cócteles y bebidas en el bar de la terraza")
+                        ),
+                        120.0f),
+
+
+                new DayPass("DayPass Hotel Rosario Centro", 4.5f, "Rosario", "Día completo en el Hotel Rosario Centro con almuerzo incluido",
+                        Arrays.asList(
+                                new Service("Acceso al gimnasio", "Gimnasio totalmente equipado"),
+                                new Service("Almuerzo", "Disfruta de un almuerzo gourmet"),
+                                new Service("Zona de descanso", "Áreas cómodas para relajarte"),
+                                new Service("Piscina", "Piscina climatizada con vistas panorámicas"),
+                                new Service("Bar", "Bebidas y snacks en el bar de la piscina")
+                        ),
+                        120.0f),
+                new DayPass("DayPass Apartment Costanera", 4.5f, "Rosario", "Día de sol en los apartamentos Costanera con piscina y vistas al río Paraná",
+                        Arrays.asList(
+                                new Service("Piscina", "Piscina al aire libre con reposeras"),
+                                new Service("Solarium", "Área de relax con camastros"),
+                                new Service("Barbacoa", "Asado y comidas típicas en la parrilla"),
+                                new Service("Juegos", "Actividades recreativas para toda la familia"),
+                                new Service("Bar", "Bebidas y snacks en el bar de la piscina")
+                        ),
+                        100.0f),
+
+
+                new DayPass("DayPass Apartment Patio Olmos", 4.6f, "Córdoba", "Relájate en el Apartment Patio Olmos con terraza y vistas a la ciudad",
+                        Arrays.asList(
+                                new Service("Jacuzzi", "Acceso al jacuzzi privado"),
+                                new Service("Terraza", "Disfruta de la terraza con vistas panorámicas"),
+                                new Service("Café", "Café y snacks incluidos durante el día"),
+                                new Service("Zona de lectura", "Espacio tranquilo para leer y descansar"),
+                                new Service("Bar", "Cócteles y bebidas en el bar de la terraza")
+                        ),
+                        100.0f),
+                new DayPass("DayPass Apartment Nueva Córdoba", 4.5f, "Córdoba", "Día de relax en los apartamentos de Nueva Córdoba con piscina y solarium",
+                        Arrays.asList(
+                                new Service("Piscina", "Piscina al aire libre con reposeras"),
+                                new Service("Solarium", "Área de relax con camastros"),
+                                new Service("Barbacoa", "Asado y comidas típicas en la parrilla"),
+                                new Service("Juegos", "Actividades recreativas para toda la familia"),
+                                new Service("Bar", "Bebidas y snacks en el bar de la piscina")
+                        ),
+                        80.0f),
+
+
+                new DayPass("DayPass Estancia Las Dunas", 4.3f, "Mar del Plata", "Día de campo en la Estancia Las Dunas con cabalgatas y asado",
+                        Arrays.asList(
+                                new Service("Cabalgata", "Recorrido a caballo por los campos de la estancia"),
+                                new Service("Asado", "Almuerzo con asado y comidas típicas"),
+                                new Service("Piscina", "Piscina al aire libre con reposeras"),
+                                new Service("Juegos", "Actividades recreativas para toda la familia"),
+                                new Service("Bar", "Bebidas y snacks en el bar de la piscina")
+                        ),
+                        80.0f),
+                new DayPass("DayPass Estancia Mar Azul", 4.4f, "Mar del Plata", "Día de campo en la Estancia Mar Azul con cabalgatas y almuerzo campestre",
+                        Arrays.asList(
+                                new Service("Cabalgata", "Recorrido a caballo por los campos de la estancia"),
+                                new Service("Almuerzo", "Almuerzo campestre con comidas típicas"),
+                                new Service("Piscina", "Piscina al aire libre con reposeras"),
+                                new Service("Juegos", "Actividades recreativas para toda la familia"),
+                                new Service("Bar", "Bebidas y snacks en el bar de la piscina")
+                        ),
+                        70.0f)
+        );
     }
 }
 
