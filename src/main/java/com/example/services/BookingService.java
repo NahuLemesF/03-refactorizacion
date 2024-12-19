@@ -7,11 +7,11 @@ import com.example.services.interfaces.IMenuService;
 import java.util.Scanner;
 
 public class BookingService implements IBookingService {
-    private final Database database;
     private final IMenuService menuService;
+    private final StayService stayService = new StayService(new Scanner(System.in));
+    private final DayPassService dayPassService = new DayPassService(new Scanner(System.in));
 
-    public BookingService(Database database, IMenuService menuService, BookingCreation bookingCreation) {
-        this.database = database;
+    public BookingService(Database database, IMenuService menuService) {
         this.menuService = menuService;
     }
 
@@ -19,12 +19,12 @@ public class BookingService implements IBookingService {
     public void start() {
         Integer option = menuService.showMenu();
 
-        while (option != 4) {
+        while (option != 5) {
             switch (option) {
-                case 1 -> ;
-                case 2 -> updateBooking();
-                case 3: cancelBooking();
-                    break;
+                case 1 -> stayService.createStay();
+                case 2 -> dayPassService.createDayPass();
+//                case 3: bookingDeleter.cancelStay( database.);
+//                    break;
             }
             option = menuService.showMenu();
         }
