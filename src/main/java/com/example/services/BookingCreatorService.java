@@ -1,5 +1,6 @@
 package com.example.services;
 
+import com.example.models.Client;
 import com.example.data.Database;
 import com.example.models.*;
 
@@ -59,9 +60,9 @@ public class BookingCreatorService {
     private DetailsStay collectStayDetails(Stay stay) {
         LocalDate startDate = promptDate("Ingrese la fecha de inicio (DD/MM/YYYY):");
         LocalDate endDate = promptDate("Ingrese la fecha de fin (DD/MM/YYYY):");
-        int adults = promptInt("Ingrese la cantidad de adultos:");
-        int children = promptInt("Ingrese la cantidad de niños:");
-        int rooms = promptInt("Ingrese la cantidad de habitaciones:");
+        Integer adults = promptInt("Ingrese la cantidad de adultos:");
+        Integer children = promptInt("Ingrese la cantidad de niños:");
+        Integer rooms = promptInt("Ingrese la cantidad de habitaciones:");
 
         return new DetailsStay(startDate, children, adults, endDate, rooms, stay.getCity(), stay.getType());
     }
@@ -82,12 +83,12 @@ public class BookingCreatorService {
     private void confirmAndCreate(
             Accommodation accommodation,
             Details details,
-            float unitPrice,
-            int totalPeople,
+            Float unitPrice,
+            Integer totalPeople,
             String selectionName,
             Function<Void, Float> priceCalculator
     ) {
-        float totalPrice = priceCalculator.apply(null);
+        Float totalPrice = priceCalculator.apply(null);
         System.out.printf("Precio total: $%.2f %n¿Desea confirmar su reserva? (S/N)%n", totalPrice);
 
         if (scanner.nextLine().equalsIgnoreCase("S")) {
@@ -128,7 +129,7 @@ public class BookingCreatorService {
         return prompt(message, input -> LocalTime.parse(input, DateTimeFormatter.ofPattern("HH:mm")));
     }
 
-    private int promptInt(String message) {
+    private Integer promptInt(String message) {
         return prompt(message, Integer::parseInt);
     }
 

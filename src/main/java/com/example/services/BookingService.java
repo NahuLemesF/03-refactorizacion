@@ -1,25 +1,26 @@
+// Refactored BookingService
+
 package com.example.services;
 
-import com.example.data.Database;
 import com.example.services.interfaces.IBookingService;
 import com.example.services.interfaces.IMenuService;
 
+import java.util.Map;
+import java.util.function.Consumer;
+
 public class BookingService implements IBookingService {
     private final IMenuService menuService;
-    private StayService stayService;
-    private DayPassService dayPassService;
-    private BookingDeleterService bookingDeleterService;
-    private static final int BOOK_STAY_OPTION = 1;
-    private static final int BOOK_DAYPASS_OPTION = 2;
-    private static final int UPDATE_BOOKING_OPTION = 3;
-    private static final int CANCEL_BOOKING_OPTION = 4;
-    private static final int EXIT_OPTION = 5;
+    private final Map<Integer, Consumer<Void>> actionMap;
+    private static final Integer EXIT_OPTION = 5;
 
-    public BookingService(Database database, IMenuService menuService, StayService stayService, DayPassService dayPassService, BookingDeleterService bookingDeleterService) {
+    public BookingService(IMenuService menuService, StayService stayService, DayPassService dayPassService, BookingDeleterService bookingDeleterService) {
         this.menuService = menuService;
-        this.stayService = stayService;
-        this.dayPassService = dayPassService;
-        this.bookingDeleterService = bookingDeleterService;
+        this.actionMap = Map.of(
+                1, unused -> stayService.createStay(),
+                2, unused -> dayPassService.createDayPass(),
+                3, unused -> System.out.println("Actualizar una reserva"),
+                4, unused -> bookingDeleterService.cancelBooking()
+        );
     }
 
     @Override
@@ -27,13 +28,8 @@ public class BookingService implements IBookingService {
         Integer option = menuService.showMenu();
 
         while (option != EXIT_OPTION) {
-            switch (option) {
-                case BOOK_STAY_OPTION -> stayService.createStay();
-                case BOOK_DAYPASS_OPTION -> dayPassService.createDayPass();
-                case UPDATE_BOOKING_OPTION -> System.out.println("Actualizar una reserva");
-                case CANCEL_BOOKING_OPTION -> bookingDeleterService.cancelBooking();
-                default -> System.out.println("Opción inválida. Por favor, intente nuevamente.");
-            }
+            actionMap.getOrDefault(option, unused -> System.out.println("Opción inválida. Por favor, intente nuevamente."))
+                    .accept(null);
             option = menuService.showMenu();
         }
 

@@ -1,44 +1,29 @@
 package com.example.services;
 
 import com.example.data.Database;
-import com.example.models.Booking;
 import com.example.models.Stay;
+import com.example.services.interfaces.IValidatorService;
 
 import java.util.List;
-import java.util.Scanner;
 
-abstract class BaseReservationService {
-    protected final Scanner scanner;
+public abstract class BaseReservationService {
+    protected final IValidatorService validatorService;
 
-    public BaseReservationService(Scanner scanner) {
-        this.scanner = scanner;
+    public BaseReservationService(IValidatorService validatorService) {
+        this.validatorService = validatorService;
     }
 
     protected String selectCity() {
         System.out.println("Ciudades disponibles:");
-        List <String> cities = Database.getStays().stream()
-                .map(Stay::getCity)
-                .distinct()
-                .toList();
-        for (int i = 0; i < cities.size(); i++) {
+        List<String> cities = Database.getStays().stream().map(Stay::getCity).distinct().toList();
+        for (Integer i = 0; i < cities.size(); i++) {
             System.out.println((i + 1) + ". " + cities.get(i));
         }
-        int cityIndex = readOption(cities.size());
+        Integer cityIndex = validatorService.readInt("Seleccione una ciudad:");
         return cities.get(cityIndex - 1);
     }
 
-    protected int readOption(int maxOption) {
-        int option = -1;
-        while (option < 1 || option > maxOption) {
-            System.out.printf("Seleccione una opción válida (1 - %d):%n", maxOption);
-            if (scanner.hasNextInt()) {
-                option = scanner.nextInt();
-                scanner.nextLine();
-            } else {
-                System.out.println("Entrada inválida. Por favor, ingrese un número.");
-                scanner.nextLine();
-            }
-        }
-        return option;
+    protected Integer readOption(Integer maxOption) {
+        return validatorService.readInt(String.format("Seleccione una opción válida (1 - %d):", maxOption));
     }
 }

@@ -3,28 +3,31 @@ package com.example.services;
 import com.example.data.Database;
 import com.example.models.Booking;
 import com.example.models.Client;
+import com.example.services.interfaces.IValidatorService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class BookingDeleterService {
-    private final Scanner scanner;
+    private final IValidatorService validatorService;
 
-    public BookingDeleterService(Scanner scanner) {
-        this.scanner = scanner;
+    public BookingDeleterService(Scanner scanner, IValidatorService validatorService) {
+        this.validatorService = validatorService;
     }
 
     public void cancelBooking() {
-        String email = promptEmail();
-        LocalDate birthDate = promptBirthDate();
+        String email = validatorService.readString("Ingrese su correo electrónico:");
+        LocalDate birthDate = validatorService.readLocalDate("Ingrese su fecha de nacimiento (yyyy-MM-dd):");
 
         Booking bookingToCancel = Database.getBookings().stream()
                 .filter(booking -> bookingMatchesClient(booking, email, birthDate))
                 .findFirst()
                 .orElse(null);
 
+        checkBooking(bookingToCancel);
+    }
+
+    public void checkBooking(Booking bookingToCancel) {
         if (bookingToCancel != null) {
             Database.getBookings().remove(bookingToCancel);
             System.out.println("Reserva cancelada exitosamente.");
@@ -36,22 +39,5 @@ public class BookingDeleterService {
     private boolean bookingMatchesClient(Booking booking, String email, LocalDate birthDate) {
         Client client = booking.getClient();
         return client.getEmail().equalsIgnoreCase(email) && client.getBirthDate().equals(birthDate);
-    }
-
-    private String promptEmail() {
-        System.out.println("Ingrese su correo electrónico:");
-        return scanner.nextLine().trim();
-    }
-
-    private LocalDate promptBirthDate() {
-        System.out.println("Ingrese su fecha de nacimiento (DD/MM/YYYY):");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        while (true) {
-            try {
-                return LocalDate.parse(scanner.nextLine().trim(), formatter);
-            } catch (DateTimeParseException e) {
-                System.out.println("Error: La fecha ingresada no tiene el formato correcto. Inténtelo nuevamente.");
-            }
-        }
     }
 }

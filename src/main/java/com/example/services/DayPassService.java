@@ -2,13 +2,17 @@ package com.example.services;
 
 import com.example.data.Database;
 import com.example.models.*;
+import com.example.services.interfaces.IValidatorService;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class DayPassService extends BaseReservationService {
-    public DayPassService(Scanner scanner) {
-        super(scanner);
+    private Scanner scanner;
+
+    public DayPassService(Scanner scanner, IValidatorService validatorService) {
+        super(validatorService);
+        this.scanner = scanner;
     }
 
     public void createDayPass() {
@@ -31,7 +35,7 @@ public class DayPassService extends BaseReservationService {
         printOptions("Días de Sol disponibles:", dayPasses, dayPass -> String.format(
                 "Nombre: %s\nDescripción: %s\nCalificación: %.1f\nPrecio por persona: %.2f",
                 dayPass.getName(), dayPass.getDescription(), dayPass.getRate(), dayPass.getPersonPrice()));
-        int dayPassIndex = readOption(dayPasses.size());
+        Integer dayPassIndex = readOption(dayPasses.size());
         return dayPasses.get(dayPassIndex - 1);
     }
 
@@ -40,13 +44,13 @@ public class DayPassService extends BaseReservationService {
         printOptions("Servicios disponibles:", services, service -> String.format(
                 "Nombre: %s\nDescripción: %s",
                 service.getName(), service.getDescription()));
-        int serviceIndex = readOption(services.size());
+        Integer serviceIndex = readOption(services.size());
         return services.get(serviceIndex - 1);
     }
 
     private <T> void printOptions(String header, List<T> items, java.util.function.Function<T, String> formatter) {
         System.out.println(header);
-        for (int i = 0; i < items.size(); i++) {
+        for (Integer i = 0; i < items.size(); i++) {
             System.out.printf("%d. %s%n", i + 1, formatter.apply(items.get(i)));
         }
     }
