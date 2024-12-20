@@ -1,5 +1,7 @@
 package com.example.services;
 
+import com.example.services.interfaces.IValidatorService;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -8,9 +10,11 @@ import java.util.function.Function;
 
 public class InputService {
     private final Scanner scanner;
+    private IValidatorService validatorService;
 
-    public InputService(Scanner scanner) {
+    public InputService(Scanner scanner, IValidatorService validatorService) {
         this.scanner = scanner;
+        this.validatorService = validatorService;
     }
 
     public LocalDate promptDate(String message) {

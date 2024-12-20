@@ -37,7 +37,7 @@ public class BookingDeleterService {
     }
 
 
-    private boolean bookingMatchesClient(Booking booking, String email, LocalDate birthDate) {
+    private Boolean bookingMatchesClient(Booking booking, String email, LocalDate birthDate) {
         Client client = booking.getClient();
         return client.getEmail().equalsIgnoreCase(email) && client.getBirthDate().equals(birthDate);
     }

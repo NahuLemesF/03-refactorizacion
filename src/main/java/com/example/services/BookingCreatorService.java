@@ -1,9 +1,11 @@
 package com.example.services;
 
+import com.example.data.DetailsData;
 import com.example.models.*;
 import com.example.data.Database;
 
 import java.time.LocalDate;
+import java.util.function.Function;
 
 public class BookingCreatorService {
     private InputService inputService;
@@ -11,12 +13,7 @@ public class BookingCreatorService {
     private SummaryPrinter summaryPrinter;
     private PriceCalculator priceCalculator;
 
-    public BookingCreatorService(
-            InputService inputService,
-            ClientService clientService,
-            SummaryPrinter summaryPrinter,
-            PriceCalculator priceCalculator
-    ) {
+    public BookingCreatorService(InputService inputService, ClientService clientService, SummaryPrinter summaryPrinter, PriceCalculator priceCalculator) {
         this.inputService = inputService;
         this.clientService = clientService;
         this.summaryPrinter = summaryPrinter;
@@ -31,11 +28,11 @@ public class BookingCreatorService {
         processDayPassOrThrow(accommodation, selection);
     }
 
-    private boolean isStayBooking(Accommodation accommodation, Object selection) {
+    private Boolean isStayBooking(Accommodation accommodation, Object selection) {
         return accommodation instanceof Stay && selection instanceof Room;
     }
 
-    private boolean isDayPassBooking(Accommodation accommodation, Object selection) {
+    private Boolean isDayPassBooking(Accommodation accommodation, Object selection) {
         return accommodation instanceof DayPass && selection instanceof Service;
     }
 
@@ -51,41 +48,13 @@ public class BookingCreatorService {
         throw new IllegalArgumentException("Tipo de alojamiento o selección no soportados");
     }
 
+
     private void processStayBooking(Stay stay, Room room) {
-        DetailsStay details = collectStayDetails(stay);
-        summaryPrinter.printSummary("Resumen de la reserva:", details, stay.getName(), room.getType());
-
-        float totalPrice = priceCalculator.calculateStayPrice(
-                room.getPrice(),
-                details.getRoomsQuantity(),
-                details.getAdultsQuantity() + details.getChildrenQuantity()
-        );
-
-        confirmAndCreate(
-                stay,
-                details,
-                totalPrice,
-                details.getAdultsQuantity() + details.getChildrenQuantity(),
-                room.getType()
-        );
+        processBooking(stay, this::collectStayDetails, details -> priceCalculator.calculateStayPrice(room.getPrice(), ((DetailsStay) details).getRoomsQuantity(), details.getAdultsQuantity() + details.getChildrenQuantity()), room.getType());
     }
 
     private void processDayPassBooking(DayPass dayPass, Service service) {
-        Details details = collectDayPassDetails(dayPass);
-        summaryPrinter.printSummary("Resumen de la reserva:", details, dayPass.getName(), service.getName());
-
-        Float totalPrice = priceCalculator.calculateDayPassPrice(
-                dayPass.getPersonPrice(),
-                details.getAdultsQuantity() + details.getChildrenQuantity()
-        );
-
-        confirmAndCreate(
-                dayPass,
-                details,
-                totalPrice,
-                details.getAdultsQuantity() + details.getChildrenQuantity(),
-                service.getName()
-        );
+        processBooking(dayPass, this::collectDayPassDetails, details -> priceCalculator.calculateDayPassPrice(dayPass.getPersonPrice(), details.getAdultsQuantity() + details.getChildrenQuantity()), service.getName());
     }
 
     private DetailsStay collectStayDetails(Stay stay) {
@@ -95,7 +64,9 @@ public class BookingCreatorService {
         Integer children = inputService.promptInt("Ingrese la cantidad de niños:");
         Integer rooms = inputService.promptInt("Ingrese la cantidad de habitaciones:");
 
-        return new DetailsStay(startDate, children, adults, endDate, rooms, stay.getCity(), stay.getType());
+        DetailsData detailsData = new DetailsData(startDate, children, adults, stay.getCity());
+
+        return new DetailsStay(detailsData, endDate, rooms, stay.getType());
     }
 
     private Details collectDayPassDetails(DayPass dayPass) {
@@ -103,29 +74,52 @@ public class BookingCreatorService {
         Integer adults = inputService.promptInt("Ingrese la cantidad de adultos:");
         Integer children = inputService.promptInt("Ingrese la cantidad de niños:");
 
-        return new Details(date, children, adults, dayPass.getCity());
+        DetailsData detailsData = new DetailsData(date, children, adults, dayPass.getCity());
+
+        return new Details(detailsData);
     }
 
-    private void confirmAndCreate(
-            Accommodation accommodation,
-            Details details,
-            Float totalPrice,
-            Integer totalPeople,
-            String selectionName
-    ) {
+
+    private void confirmAndCreate(Accommodation accommodation, Details details, Float totalPrice, Integer totalPeople, String selectionName) {
+        if (confirmReservation(totalPrice)) {
+            Client client = createAndPrintClient();
+            saveBooking(accommodation, details, client);
+            printSuccessMessage();
+        } else {
+            printCancellationMessage();
+        }
+    }
+
+    private Boolean confirmReservation(Float totalPrice) {
         summaryPrinter.printTotalPrice(totalPrice);
         summaryPrinter.printConfirmationPrompt();
+        return inputService.promptString("").equalsIgnoreCase("S");
+    }
 
-        if (inputService.promptString("").equalsIgnoreCase("S")) {
-            Client client = clientService.createClient();
-            summaryPrinter.printClientDetails(client);
+    private Client createAndPrintClient() {
+        Client client = clientService.createClient();
+        summaryPrinter.printClientDetails(client);
+        return client;
+    }
 
-            Booking booking = new Booking(accommodation, client, details);
-            Database.getBookings().add(booking);
+    private void saveBooking(Accommodation accommodation, Details details, Client client) {
+        Booking booking = new Booking(accommodation, client, details);
+        Database.getBookings().add(booking);
+    }
 
-            System.out.println("¡Reserva creada exitosamente!");
-            return;
-        }
+    private void printSuccessMessage() {
+        System.out.println("¡Reserva creada exitosamente!");
+    }
+
+    private void printCancellationMessage() {
         System.out.println("Reserva cancelada.");
     }
+
+    private <T extends Accommodation> void processBooking(T accommodation, Function<T, Details> collectDetails, Function<Details, Float> calculateTotalPrice, String selectionName) {
+        Details details = collectDetails.apply(accommodation);
+        summaryPrinter.printSummary("Resumen de la reserva:", details, accommodation.getName(), selectionName);
+        Float totalPrice = calculateTotalPrice.apply(details);
+        confirmAndCreate(accommodation, details, totalPrice, details.getAdultsQuantity() + details.getChildrenQuantity(), selectionName);
+    }
+
 }

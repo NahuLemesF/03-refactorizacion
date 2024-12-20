@@ -1,29 +1,40 @@
 package com.example.services;
 
-import com.example.data.Database;
-import com.example.models.Stay;
+import com.example.models.Accommodation;
 import com.example.services.interfaces.IValidatorService;
 
 import java.util.List;
+import java.util.Scanner;
+import java.util.function.Function;
 
-public abstract class BaseReservationService {
-    protected IValidatorService validatorService;
+public class BaseReservationService {
+    protected final Scanner scanner;
+    protected final IValidatorService validatorService;
 
-    public BaseReservationService(IValidatorService validatorService) {
+    public BaseReservationService(Scanner scanner, IValidatorService validatorService) {
+        this.scanner = scanner;
         this.validatorService = validatorService;
     }
 
-    protected String selectCity() {
+    protected String selectCity(List<? extends Accommodation> accommodations) {
         System.out.println("Ciudades disponibles:");
-        List<String> cities = Database.getStays().stream().map(Stay::getCity).distinct().toList();
-        for (Integer i = 0; i < cities.size(); i++) {
-            System.out.println((i + 1) + ". " + cities.get(i));
-        }
-        Integer cityIndex = validatorService.readInt("Seleccione una ciudad:");
+        List<String> cities = accommodations.stream()
+                .map(Accommodation::getCity)
+                .distinct()
+                .toList();
+        printOptions("Seleccione una ciudad:", cities, Function.identity());
+        Integer cityIndex = readOption(cities.size());
         return cities.get(cityIndex - 1);
     }
 
     protected Integer readOption(Integer maxOption) {
         return validatorService.readInt(String.format("Seleccione una opción válida (1 - %d):", maxOption));
+    }
+
+    protected <T> void printOptions(String header, List<T> items, Function<T, String> formatter) {
+        System.out.println(header);
+        for (Integer i = 0; i < items.size(); i++) {
+            System.out.printf("%d. %s%n", i + 1, formatter.apply(items.get(i)));
+        }
     }
 }

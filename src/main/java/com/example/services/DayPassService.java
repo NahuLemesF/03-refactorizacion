@@ -1,28 +1,26 @@
 package com.example.services;
 
 import com.example.data.Database;
-import com.example.models.*;
+import com.example.models.DayPass;
+import com.example.models.Service;
 import com.example.services.interfaces.IValidatorService;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class DayPassService extends BaseReservationService {
-    private Scanner scanner;
 
     public DayPassService(Scanner scanner, IValidatorService validatorService) {
-        super(validatorService);
-        this.scanner = scanner;
+        super(scanner, validatorService);
     }
 
     public void createDayPass() {
-        String cityName = selectCity();
+        String cityName = selectCity(Database.getDaypass());
         List<DayPass> dayPassesByCity = filterDayPassesByCity(cityName);
         DayPass selectedDayPass = selectDayPass(dayPassesByCity);
         Service selectedService = selectService(selectedDayPass);
 
-        BookingCreatorService bookingCreatorService = new BookingCreatorService(scanner);
-        bookingCreatorService.createBooking(selectedDayPass, selectedService);
+        createBooking(selectedDayPass, selectedService);
     }
 
     private List<DayPass> filterDayPassesByCity(String city) {
@@ -39,8 +37,8 @@ public class DayPassService extends BaseReservationService {
         return dayPasses.get(dayPassIndex - 1);
     }
 
-    private Service selectService(Accommodation accommodation) {
-        List<Service> services = accommodation.getServices();
+    private Service selectService(DayPass dayPass) {
+        List<Service> services = dayPass.getServices();
         printOptions("Servicios disponibles:", services, service -> String.format(
                 "Nombre: %s\nDescripción: %s",
                 service.getName(), service.getDescription()));
@@ -48,10 +46,14 @@ public class DayPassService extends BaseReservationService {
         return services.get(serviceIndex - 1);
     }
 
-    private <T> void printOptions(String header, List<T> items, java.util.function.Function<T, String> formatter) {
-        System.out.println(header);
-        for (Integer i = 0; i < items.size(); i++) {
-            System.out.printf("%d. %s%n", i + 1, formatter.apply(items.get(i)));
-        }
+    private void createBooking(DayPass dayPass, Service service) {
+        InputService inputService = new InputService(scanner, validatorService);
+        BookingCreatorService bookingCreatorService = new BookingCreatorService(
+                inputService,
+                new ClientService(inputService),
+                new SummaryPrinter(),
+                new PriceCalculator()
+        );
+        bookingCreatorService.createBooking(dayPass, service);
     }
 }

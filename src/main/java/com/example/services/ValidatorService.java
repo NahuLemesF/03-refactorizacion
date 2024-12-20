@@ -3,7 +3,6 @@ package com.example.services;
 import com.example.services.interfaces.IValidatorService;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Scanner;
 
 public class ValidatorService implements IValidatorService {
@@ -21,7 +20,7 @@ public class ValidatorService implements IValidatorService {
 
     @Override
     public Integer readInt(String prompt) {
-        int input;
+        Integer input;
         while (true) {
             try {
                 System.out.println(prompt);
