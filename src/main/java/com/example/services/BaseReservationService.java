@@ -1,6 +1,7 @@
 package com.example.services;
 
 import com.example.data.Database;
+import com.example.models.Booking;
 import com.example.models.Stay;
 
 import java.util.List;
@@ -15,7 +16,7 @@ abstract class BaseReservationService {
 
     protected String selectCity() {
         System.out.println("Ciudades disponibles:");
-        List<String> cities = Database.getInstance().getStays().stream()
+        List <String> cities = Database.getStays().stream()
                 .map(Stay::getCity)
                 .distinct()
                 .toList();
@@ -32,10 +33,9 @@ abstract class BaseReservationService {
             System.out.println("Seleccione una opción válida (1 - " + maxOption + "):");
             if (scanner.hasNextInt()) {
                 option = scanner.nextInt();
-            } else {
-                scanner.next(); // Limpiar entrada inválida
             }
+            scanner.next();
         }
         return option;
-    }
+}
 }

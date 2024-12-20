@@ -3,9 +3,7 @@ package com.example.services;
 import com.example.data.Database;
 import com.example.models.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -22,8 +20,8 @@ public class StayService {
         String typeOfStay = selectType(listStayByCity);
         Stay selectedStay = filterStayByType(typeOfStay, listStayByCity);
         Room selectedRoom = selectRoom(selectedStay);
-        BookingCreator bookingCreator = new BookingCreator(scanner);
-        bookingCreator.createBooking(selectedStay, selectedRoom);
+        BookingCreatorService bookingCreatorService = new BookingCreatorService(scanner);
+        bookingCreatorService.createBooking(selectedStay, selectedRoom);
     }
 
     public String selectCity() {
@@ -49,14 +47,18 @@ public class StayService {
     }
 
     public String selectType(ArrayList<Stay> filterStayByCity) {
-        ArrayList<String> typeOfStay = new ArrayList<>();
+        Set<AccommodationType> uniqueTypes = new LinkedHashSet<>();
         for (Stay stay : filterStayByCity) {
-            if (!typeOfStay.contains(stay.getType().name())) {
-                typeOfStay.add(stay.getType().name());
-            }
+            uniqueTypes.add(stay.getType());
         }
-        int index = selectOptionFromList(typeOfStay, scanner, "Seleccione un tipo de Alojamiento:", Function.identity());
-        return typeOfStay.get(index);
+        List<AccommodationType> typeOfStay = new ArrayList<>(uniqueTypes);
+        int index = selectOptionFromList(
+                typeOfStay,
+                scanner,
+                "Seleccione un tipo de Alojamiento:",
+                AccommodationType::toString
+        );
+        return typeOfStay.get(index).name();
     }
 
     public Stay filterStayByType(String type, ArrayList<Stay> listStayFilteredByCity) {

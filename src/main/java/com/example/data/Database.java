@@ -32,6 +32,10 @@ public class Database {
         return listDaypass;
     }
 
+    public static List<Booking> getBookings() {
+        return listBooking;
+    }
+
     private void initialize() {
         listStay = Arrays.asList(
                 new Stay("Hotel Palermo Deluxe", 4.8f, "Buenos Aires", "Lujoso hotel en el corazón de Palermo", Arrays.asList(
