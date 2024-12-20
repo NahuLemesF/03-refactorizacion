@@ -7,7 +7,7 @@ import com.example.services.interfaces.IValidatorService;
 import java.util.*;
 
 public class StayService {
-    private final IValidatorService validatorService;
+    private IValidatorService validatorService;
     private final Scanner scanner = new Scanner(System.in);
 
     public StayService(Scanner scanner,IValidatorService validatorService) {

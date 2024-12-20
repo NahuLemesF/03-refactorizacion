@@ -7,7 +7,7 @@ import com.example.services.interfaces.IValidatorService;
 import java.util.List;
 
 public abstract class BaseReservationService {
-    protected final IValidatorService validatorService;
+    protected IValidatorService validatorService;
 
     public BaseReservationService(IValidatorService validatorService) {
         this.validatorService = validatorService;

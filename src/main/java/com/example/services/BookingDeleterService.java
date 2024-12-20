@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class BookingDeleterService {
-    private final IValidatorService validatorService;
+    private IValidatorService validatorService;
 
     public BookingDeleterService(Scanner scanner, IValidatorService validatorService) {
         this.validatorService = validatorService;

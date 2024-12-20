@@ -2,11 +2,11 @@ package com.example.services;
 
 public class PriceCalculator {
 
-    public float calculateStayPrice(float roomPrice, int roomsQuantity, int totalPeople) {
+    public Float calculateStayPrice(Float roomPrice, Integer roomsQuantity, Integer totalPeople) {
         return roomPrice * roomsQuantity * totalPeople;
     }
 
-    public float calculateDayPassPrice(float personPrice, int totalPeople) {
+    public Float calculateDayPassPrice(Float personPrice, Integer totalPeople) {
         return personPrice * totalPeople;
     }
 }

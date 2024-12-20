@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MenuService implements IMenuService {
-    private final IValidatorService validatorService;
+    private IValidatorService validatorService;
 
     public MenuService(IValidatorService validatorService) {
         this.validatorService = validatorService;

@@ -34,20 +34,6 @@ public class ValidatorService implements IValidatorService {
     }
 
     @Override
-    public Float readFloat(String prompt) {
-        float input;
-        while (true) {
-            try {
-                System.out.println(prompt);
-                input = Float.parseFloat(scanner.nextLine());
-                return input;
-            } catch (NumberFormatException e) {
-                System.err.println("Entrada inválida. Por favor ingrese un número decimal.");
-            }
-        }
-    }
-
-    @Override
     public LocalDate readLocalDate(String prompt) {
         LocalDate date;
         while (true) {
@@ -61,24 +47,4 @@ public class ValidatorService implements IValidatorService {
         }
     }
 
-    @Override
-    public LocalTime readLocalTime(String prompt) {
-        LocalTime time;
-        while (true) {
-            try {
-                System.out.println(prompt);
-                time = LocalTime.parse(scanner.nextLine());
-                return time;
-            } catch (Exception e) {
-                System.err.println("Hora inválida. El formato debe ser: HH:mm");
-            }
-        }
-    }
-
-    @Override
-    public void clearBuffer() {
-        if (scanner.hasNextLine()) {
-            scanner.nextLine();
-        }
-    }
 }

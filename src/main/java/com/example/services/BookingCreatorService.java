@@ -3,11 +3,13 @@ package com.example.services;
 import com.example.models.*;
 import com.example.data.Database;
 
+import java.time.LocalDate;
+
 public class BookingCreatorService {
-    private final InputService inputService;
-    private final ClientService clientService;
-    private final SummaryPrinter summaryPrinter;
-    private final PriceCalculator priceCalculator;
+    private InputService inputService;
+    private ClientService clientService;
+    private SummaryPrinter summaryPrinter;
+    private PriceCalculator priceCalculator;
 
     public BookingCreatorService(
             InputService inputService,
@@ -72,7 +74,7 @@ public class BookingCreatorService {
         Details details = collectDayPassDetails(dayPass);
         summaryPrinter.printSummary("Resumen de la reserva:", details, dayPass.getName(), service.getName());
 
-        float totalPrice = priceCalculator.calculateDayPassPrice(
+        Float totalPrice = priceCalculator.calculateDayPassPrice(
                 dayPass.getPersonPrice(),
                 details.getAdultsQuantity() + details.getChildrenQuantity()
         );
@@ -89,17 +91,17 @@ public class BookingCreatorService {
     private DetailsStay collectStayDetails(Stay stay) {
         LocalDate startDate = inputService.promptDate("Ingrese la fecha de inicio (DD/MM/YYYY):");
         LocalDate endDate = inputService.promptDate("Ingrese la fecha de fin (DD/MM/YYYY):");
-        int adults = inputService.promptInt("Ingrese la cantidad de adultos:");
-        int children = inputService.promptInt("Ingrese la cantidad de niños:");
-        int rooms = inputService.promptInt("Ingrese la cantidad de habitaciones:");
+        Integer adults = inputService.promptInt("Ingrese la cantidad de adultos:");
+        Integer children = inputService.promptInt("Ingrese la cantidad de niños:");
+        Integer rooms = inputService.promptInt("Ingrese la cantidad de habitaciones:");
 
         return new DetailsStay(startDate, children, adults, endDate, rooms, stay.getCity(), stay.getType());
     }
 
     private Details collectDayPassDetails(DayPass dayPass) {
         LocalDate date = inputService.promptDate("Ingrese la fecha del día de sol (DD/MM/YYYY):");
-        int adults = inputService.promptInt("Ingrese la cantidad de adultos:");
-        int children = inputService.promptInt("Ingrese la cantidad de niños:");
+        Integer adults = inputService.promptInt("Ingrese la cantidad de adultos:");
+        Integer children = inputService.promptInt("Ingrese la cantidad de niños:");
 
         return new Details(date, children, adults, dayPass.getCity());
     }
@@ -107,8 +109,8 @@ public class BookingCreatorService {
     private void confirmAndCreate(
             Accommodation accommodation,
             Details details,
-            float totalPrice,
-            int totalPeople,
+            Float totalPrice,
+            Integer totalPeople,
             String selectionName
     ) {
         summaryPrinter.printTotalPrice(totalPrice);
@@ -122,8 +124,8 @@ public class BookingCreatorService {
             Database.getBookings().add(booking);
 
             System.out.println("¡Reserva creada exitosamente!");
-        } else {
-            System.out.println("Reserva cancelada.");
+            return;
         }
+        System.out.println("Reserva cancelada.");
     }
 }
