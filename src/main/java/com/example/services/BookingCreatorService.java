@@ -20,34 +20,17 @@ public class BookingCreatorService {
         this.priceCalculator = priceCalculator;
     }
 
-    public void createBooking(Accommodation accommodation, Object selection) {
-        if (isStayBooking(accommodation, selection)) {
+    public void createStayBooking(Accommodation accommodation, Service selection) {
+        if (accommodation instanceof Stay) {
             processStayBooking((Stay) accommodation, (Room) selection);
-            return;
         }
-        processDayPassOrThrow(accommodation, selection);
     }
 
-    private Boolean isStayBooking(Accommodation accommodation, Object selection) {
-        return accommodation instanceof Stay && selection instanceof Room;
-    }
-
-    private Boolean isDayPassBooking(Accommodation accommodation, Object selection) {
-        return accommodation instanceof DayPass && selection instanceof Service;
-    }
-
-    private void processDayPassOrThrow(Accommodation accommodation, Object selection) {
-        if (isDayPassBooking(accommodation, selection)) {
-            processDayPassBooking((DayPass) accommodation, (Service) selection);
-            return;
+    public void createDayPassBooking(Accommodation accommodation, Service selection) {
+        if (accommodation instanceof DayPass) {
+            processDayPassBooking((DayPass) accommodation, selection);
         }
-        throwInvalidBooking();
     }
-
-    private void throwInvalidBooking() {
-        throw new IllegalArgumentException("Tipo de alojamiento o selección no soportados");
-    }
-
 
     private void processStayBooking(Stay stay, Room room) {
         processBooking(stay, this::collectStayDetails, details -> priceCalculator.calculateStayPrice(room.getPrice(), ((DetailsStay) details).getRoomsQuantity(), details.getAdultsQuantity() + details.getChildrenQuantity()), room.getType());

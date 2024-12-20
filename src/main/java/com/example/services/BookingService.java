@@ -1,5 +1,3 @@
-// Refactored BookingCreatorService
-
 package com.example.services;
 
 import com.example.services.interfaces.IBookingService;

@@ -68,6 +68,6 @@ public class StayService extends BaseReservationService {
                 new SummaryPrinter(),
                 new PriceCalculator()
         );
-        bookingCreatorService.createBooking(stay, room);
+        bookingCreatorService.createStayBooking(stay, room);
     }
 }

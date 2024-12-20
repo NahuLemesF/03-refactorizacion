@@ -32,7 +32,4 @@ public class Details {
         return city;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
 }

@@ -54,6 +54,6 @@ public class DayPassService extends BaseReservationService {
                 new SummaryPrinter(),
                 new PriceCalculator()
         );
-        bookingCreatorService.createBooking(dayPass, service);
+        bookingCreatorService.createDayPassBooking(dayPass, service);
     }
 }
