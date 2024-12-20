@@ -2,7 +2,8 @@ package com.example.services;
 
 import com.example.data.Database;
 import com.example.models.DayPass;
-import com.example.models.Stay;
+import com.example.models.Room;
+import com.example.models.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,10 @@ public class DayPassService {
 
     public void createDayPass() {
         String cityName = selectCity();
-        ArrayList<DayPass> listDayPassByCity = filterDayPassByCity(cityName);
+        DayPass listDayPassByCity = filterDayPassByCity(cityName);
+        Service selectedService = selectService(listDayPassByCity);
+        BookingCreator bookingCreator = new BookingCreator(scanner);
+        bookingCreator.createBooking(listDayPassByCity, selectedService);
     }
 
     public String selectCity() {
@@ -35,7 +39,8 @@ public class DayPassService {
         return cities.get(index);
     }
 
-    public ArrayList<DayPass> filterDayPassByCity(String city) {
+    public DayPass filterDayPassByCity(String city) {
+        System.out.println("Alojamientos disponibles en " + city + ":");
         ArrayList<DayPass> filteredDayPass = new ArrayList<>();
         for (DayPass dayPass : Database.getDaypass()) {
             if (dayPass.getCity().equals(city)) {
@@ -43,10 +48,19 @@ public class DayPassService {
             }
         }
         int index = selectOptionFromList(filteredDayPass, scanner, "Seleccione un tipo de Alojamiento:", DayPass::getName);
-        return filteredDayPass;
+        return filteredDayPass.get(index);
     }
 
-
+    public Service selectService(DayPass selectedDayPass) {
+        ArrayList<Service> listServices = new ArrayList<>();
+        for (Service service : selectedDayPass.getServices()) {
+            if (service instanceof Service) {
+                listServices.add((Service) service);
+            }
+        }
+        int index = selectOptionFromList(listServices, scanner, "Seleccione un servicio:", Service::getName);
+        return listServices.get(index);
+    }
 
     public static <T> int selectOptionFromList(List<T> options, Scanner scanner, String prompt, Function<T, String> displayFunction) {
         AtomicInteger index = new AtomicInteger(1);
