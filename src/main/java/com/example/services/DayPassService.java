@@ -1,14 +1,12 @@
 package com.example.services;
 
 import com.example.data.Database;
-import com.example.models.Accommodation;
-import com.example.models.DayPass;
-import com.example.models.Room;
+import com.example.models.*;
 
 import java.util.List;
 import java.util.Scanner;
 
-class DayPassService extends BaseReservationService {
+public class DayPassService extends BaseReservationService {
     public DayPassService(Scanner scanner) {
         super(scanner);
     }
@@ -17,35 +15,39 @@ class DayPassService extends BaseReservationService {
         String cityName = selectCity();
         List<DayPass> dayPassesByCity = filterDayPassesByCity(cityName);
         DayPass selectedDayPass = selectDayPass(dayPassesByCity);
-        Room selectedRoom = selectRoom(selectedDayPass);
+        Service selectedService = selectService(selectedDayPass);
 
-        BookingCreator bookingCreator = new BookingCreator(scanner);
-        bookingCreator.createBooking(selectedDayPass, selectedRoom);
+        BookingCreatorService bookingCreatorService = new BookingCreatorService(scanner);
+        bookingCreatorService.createBooking(selectedDayPass, selectedService);
     }
 
     private List<DayPass> filterDayPassesByCity(String city) {
-        Database.getInstance();
         return Database.getDaypass().stream()
                 .filter(dayPass -> dayPass.getCity().equalsIgnoreCase(city))
                 .toList();
     }
 
     private DayPass selectDayPass(List<DayPass> dayPasses) {
-        System.out.println("Días de Sol disponibles:");
-        for (int i = 0; i < dayPasses.size(); i++) {
-            System.out.println((i + 1) + ". " + dayPasses.get(i).getName());
-        }
+        printOptions("Días de Sol disponibles:", dayPasses, dayPass -> String.format(
+                "Nombre: %s\nDescripción: %s\nCalificación: %.1f\nPrecio por persona: %.2f",
+                dayPass.getName(), dayPass.getDescription(), dayPass.getRate(), dayPass.getPersonPrice()));
         int dayPassIndex = readOption(dayPasses.size());
         return dayPasses.get(dayPassIndex - 1);
     }
 
-    private Room selectRoom(Accommodation accommodation) {
-        System.out.println("Habitaciones disponibles:");
-        List<Room> rooms = accommodation.getRooms();
-        for (int i = 0; i < rooms.size(); i++) {
-            System.out.println((i + 1) + ". " + rooms.get(i).getType());
+    private Service selectService(Accommodation accommodation) {
+        List<Service> services = accommodation.getServices();
+        printOptions("Servicios disponibles:", services, service -> String.format(
+                "Nombre: %s\nDescripción: %s",
+                service.getName(), service.getDescription()));
+        int serviceIndex = readOption(services.size());
+        return services.get(serviceIndex - 1);
+    }
+
+    private <T> void printOptions(String header, List<T> items, java.util.function.Function<T, String> formatter) {
+        System.out.println(header);
+        for (int i = 0; i < items.size(); i++) {
+            System.out.printf("%d. %s%n", i + 1, formatter.apply(items.get(i)));
         }
-        int roomIndex = readOption(rooms.size());
-        return rooms.get(roomIndex - 1);
     }
 }
