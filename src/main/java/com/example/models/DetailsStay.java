@@ -22,24 +22,9 @@ public class DetailsStay extends Details {
         this.accommodationType = accommodationType;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
 
     public Integer getRoomsQuantity() {
         return roomsQuantity;
-    }
-
-    public void setRoomsQuantity(Integer roomsQuantity) {
-        this.roomsQuantity = roomsQuantity;
-    }
-
-    public AccommodationType getAccommodationType() {
-        return accommodationType;
     }
 
 

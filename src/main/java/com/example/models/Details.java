@@ -21,35 +21,17 @@ public class Details {
         this.city = city;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
 
     public Integer getChildrenQuantity() {
         return childrenQuantity;
-    }
-
-    public void setChildrenQuantity(Integer childrenQuantity) {
-        this.childrenQuantity = childrenQuantity;
     }
 
     public Integer getAdultsQuantity() {
         return adultsQuantity;
     }
 
-    public void setAdultsQuantity(Integer adultsQuantity) {
-        this.adultsQuantity = adultsQuantity;
-    }
-
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
 }
