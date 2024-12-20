@@ -1,12 +1,12 @@
 package com.example.services;
 
+import com.example.data.Database;
 import com.example.models.Booking;
 import com.example.models.Client;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Scanner;
 
 public class BookingDeleterService {
@@ -16,17 +16,17 @@ public class BookingDeleterService {
         this.scanner = scanner;
     }
 
-    public void cancelStay(List<Booking> bookings) {
+    public void cancelBooking() {
         String email = promptEmail();
         LocalDate birthDate = promptBirthDate();
 
-        Booking bookingToCancel = bookings.stream()
+        Booking bookingToCancel = Database.getBookings().stream()
                 .filter(booking -> bookingMatchesClient(booking, email, birthDate))
                 .findFirst()
                 .orElse(null);
 
         if (bookingToCancel != null) {
-            bookings.remove(bookingToCancel);
+            Database.getBookings().remove(bookingToCancel);
             System.out.println("Reserva cancelada exitosamente.");
         } else {
             System.out.println("Reserva no encontrada. Por favor, revise los datos ingresados.");

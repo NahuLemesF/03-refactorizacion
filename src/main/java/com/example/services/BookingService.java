@@ -15,10 +15,11 @@ public class BookingService implements IBookingService {
     private static final int CANCEL_BOOKING_OPTION = 4;
     private static final int EXIT_OPTION = 5;
 
-    public BookingService(Database database, IMenuService menuService, StayService stayService, DayPassService dayPassService) {
+    public BookingService(Database database, IMenuService menuService, StayService stayService, DayPassService dayPassService, BookingDeleterService bookingDeleterService) {
         this.menuService = menuService;
         this.stayService = stayService;
         this.dayPassService = dayPassService;
+        this.bookingDeleterService = bookingDeleterService;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class BookingService implements IBookingService {
                 case BOOK_STAY_OPTION -> stayService.createStay();
                 case BOOK_DAYPASS_OPTION -> dayPassService.createDayPass();
                 case UPDATE_BOOKING_OPTION -> System.out.println("Actualizar una reserva");
-                case CANCEL_BOOKING_OPTION -> bookingDeleterService.cancelStay();
+                case CANCEL_BOOKING_OPTION -> bookingDeleterService.cancelBooking();
                 default -> System.out.println("Opción inválida. Por favor, intente nuevamente.");
             }
             option = menuService.showMenu();
