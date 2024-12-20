@@ -1,4 +1,4 @@
-// Refactored BookingService
+// Refactored BookingCreatorService
 
 package com.example.services;
 

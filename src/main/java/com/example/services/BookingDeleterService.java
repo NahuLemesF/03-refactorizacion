@@ -28,13 +28,14 @@ public class BookingDeleterService {
     }
 
     public void checkBooking(Booking bookingToCancel) {
-        if (bookingToCancel != null) {
-            Database.getBookings().remove(bookingToCancel);
-            System.out.println("Reserva cancelada exitosamente.");
-        } else {
+        if (bookingToCancel == null) {
             System.out.println("Reserva no encontrada. Por favor, revise los datos ingresados.");
+            return;
         }
+        Database.getBookings().remove(bookingToCancel);
+        System.out.println("Reserva cancelada exitosamente.");
     }
+
 
     private boolean bookingMatchesClient(Booking booking, String email, LocalDate birthDate) {
         Client client = booking.getClient();
