@@ -8,46 +8,24 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public  class BookingCreator {
+public class BookingCreator {
     private final Scanner scanner;
 
     public BookingCreator(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    public void createBooking(Stay stay, Room room) {
-        DetailsStay detailsStay = collectDetailsStay(stay);
+    public void createBooking(Accommodation accommodation, Room room) {
+        Details details;
 
-        System.out.println(
-                "Resumen de la reserva:" +
-                        "\nCiudad: " + detailsStay.getCity() +
-                        "\nAlojamiento: " + stay.getName() +
-                        "\nTipo de Alojamiento: " + detailsStay.getAccommodationType() +
-                        "\nHabitación: " + room.getType() +
-                        "\nCantidad de Habitaciones: " + detailsStay.getRoomsQuantity() +
-                        "\nNiños: " + detailsStay.getChildrenQuantity() + ", Adultos: " + detailsStay.getAdultsQuantity() +
-                        "\nFechas: Desde " + detailsStay.getStartDate() + " hasta " + detailsStay.getEndDate() +
-                        "\nPrecio por noche: " + room.getPrice() + " USD");
-
-        float basePrice = room.getPrice();
-        float totalPrice = calculateTotalPrice(basePrice, detailsStay.getAdultsQuantity() + detailsStay.getChildrenQuantity(), detailsStay);
-        System.out.println("Precio total: " + totalPrice + " USD" + "\n¿Desea confirmar su reserva? (S/N)");
-        String confirmation = scanner.nextLine();
-
-        if (confirmation.equalsIgnoreCase("S")) {
-            Client client = createClient();
-
-            System.out.println(
-                    "¡Gracias! Su reserva ha sido confirmada." +
-                            "\nDetalle de la reserva:" +
-                            "\nCliente: " + client.getFirstName() + " " + client.getLastName() +
-                            "\nFecha de nacimiento: " + client.getBirthDate() +
-                            "\nTeléfono: " + client.getPhoneNumber() +
-                            "\nNacionalidad: " + client.getNationality() +
-                            "\nCorreo: " + client.getEmail() +
-                            "\nHora de llegada: " + client.getArrivalTime());
+        if (accommodation instanceof Stay stay) {
+            details = collectDetailsStay(stay);
+            printSummary(stay, room, details);
+        } else if (accommodation instanceof DayPass dayPass) {
+            details = collectDetails(dayPass);
+            printSummary(dayPass, room, details);
         } else {
-            System.out.println("Reserva cancelada.");
+            throw new IllegalArgumentException("Tipo de alojamiento no soportado");
         }
     }
 
@@ -67,8 +45,64 @@ public  class BookingCreator {
         System.out.println("Ingrese la cantidad de habitaciones:");
         int roomsQuantity = Integer.parseInt(scanner.nextLine());
 
-
         return new DetailsStay(startDate, childrenQuantity, adultsQuantity, endDate, roomsQuantity, staySelected.getCity(), staySelected.getType());
+    }
+
+    private Details collectDetails(Accommodation accommodation) {
+        System.out.println("Ingrese la fecha (DD/MM/YYYY):");
+        LocalDate date = formatDate();
+
+        System.out.println("Ingrese la cantidad de adultos:");
+        int adultsQuantity = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Ingrese la cantidad de niños:");
+        int childrenQuantity = Integer.parseInt(scanner.nextLine());
+
+        return new Details(date, childrenQuantity, adultsQuantity, accommodation.getCity());
+    }
+
+    private void printSummary(Accommodation accommodation, Room room, Details details) {
+        System.out.println(
+                "Resumen de la reserva:" +
+                        "\nCiudad: " + details.getCity() +
+                        "\nAlojamiento: " + accommodation.getName() +
+                        "\nHabitación: " + room.getType() +
+                        "\nNiños: " + details.getChildrenQuantity() + ", Adultos: " + details.getAdultsQuantity());
+
+        if (details instanceof DetailsStay detailsStay) {
+            System.out.println(
+                    "Fechas: Desde " + detailsStay.getStartDate() + " hasta " + detailsStay.getEndDate() +
+                            "\nCantidad de habitaciones: " + detailsStay.getRoomsQuantity());
+
+            float basePrice = room.getPrice();
+            float totalPrice = calculateTotalPrice(basePrice, detailsStay.getAdultsQuantity() + detailsStay.getChildrenQuantity(), detailsStay);
+            confirmBooking(totalPrice);
+        } else {
+            DayPass dayPass = (DayPass) accommodation;
+            float totalPrice = dayPass.getPersonPrice() * (details.getAdultsQuantity() + details.getChildrenQuantity());
+            confirmBooking(totalPrice);
+        }
+    }
+
+    private void confirmBooking(float totalPrice) {
+        System.out.println("Precio total: " + totalPrice + " USD\n¿Desea confirmar su reserva? (S/N)");
+        String confirmation = scanner.nextLine();
+
+        if (confirmation.equalsIgnoreCase("S")) {
+            Client client = createClient();
+
+            System.out.println(
+                    "¡Gracias! Su reserva ha sido confirmada." +
+                            "\nDetalle de la reserva:" +
+                            "\nCliente: " + client.getFirstName() + " " + client.getLastName() +
+                            "\nFecha de nacimiento: " + client.getBirthDate() +
+                            "\nTeléfono: " + client.getPhoneNumber() +
+                            "\nNacionalidad: " + client.getNationality() +
+                            "\nCorreo: " + client.getEmail() +
+                            "\nHora de llegada: " + client.getArrivalTime());
+        } else {
+            System.out.println("Reserva cancelada.");
+        }
     }
 
     private Client createClient() {
@@ -118,7 +152,6 @@ public  class BookingCreator {
     public Boolean validateDate(Integer startDate, Integer endDate, Integer min, Integer max) {
         return startDate <= min && endDate >= max;
     }
-    
 
     public LocalDate formatDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
