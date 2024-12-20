@@ -30,12 +30,15 @@ abstract class BaseReservationService {
     protected int readOption(int maxOption) {
         int option = -1;
         while (option < 1 || option > maxOption) {
-            System.out.println("Seleccione una opción válida (1 - " + maxOption + "):");
+            System.out.printf("Seleccione una opción válida (1 - %d):%n", maxOption);
             if (scanner.hasNextInt()) {
                 option = scanner.nextInt();
+                scanner.nextLine();
+            } else {
+                System.out.println("Entrada inválida. Por favor, ingrese un número.");
+                scanner.nextLine();
             }
-            scanner.next();
         }
         return option;
-}
+    }
 }

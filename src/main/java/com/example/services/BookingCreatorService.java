@@ -29,14 +29,32 @@ public class BookingCreatorService {
     private void processStayBooking(Stay stay, Room room) {
         DetailsStay details = collectStayDetails(stay);
         printSummary("Resumen de la reserva:", details, stay.getName(), room.getType());
-        confirmAndCreate(details, room.getPrice(), details.getAdultsQuantity() + details.getChildrenQuantity());
+
+        confirmAndCreate(
+                stay,
+                details,
+                room.getPrice(),
+                details.getAdultsQuantity() + details.getChildrenQuantity(),
+                room.getType(),
+                unused -> room.getPrice() * details.getRoomsQuantity() * (details.getAdultsQuantity() + details.getChildrenQuantity())
+        );
     }
+
 
     private void processDayPassBooking(DayPass dayPass, Service service) {
         Details details = collectDayPassDetails(dayPass);
         printSummary("Resumen de la reserva:", details, dayPass.getName(), service.getName());
-        confirmAndCreate(details, service.getPrice(), details.getAdultsQuantity() + details.getChildrenQuantity());
+
+        confirmAndCreate(
+                dayPass,
+                details,
+                dayPass.getPersonPrice(),
+                details.getAdultsQuantity() + details.getChildrenQuantity(),
+                service.getName(),
+                unused -> dayPass.getPersonPrice() * (details.getAdultsQuantity() + details.getChildrenQuantity())
+        );
     }
+
 
     private DetailsStay collectStayDetails(Stay stay) {
         LocalDate startDate = promptDate("Ingrese la fecha de inicio (DD/MM/YYYY):");
@@ -61,15 +79,21 @@ public class BookingCreatorService {
                 header, details.getCity(), accommodationName, selectionName, details.getChildrenQuantity(), details.getAdultsQuantity());
     }
 
-    private void confirmAndCreate(Accommodation accommodation, Details details, float unitPrice, int totalPeople) {
-        float totalPrice = unitPrice * totalPeople;
+    private void confirmAndCreate(
+            Accommodation accommodation,
+            Details details,
+            float unitPrice,
+            int totalPeople,
+            String selectionName,
+            Function<Void, Float> priceCalculator
+    ) {
+        float totalPrice = priceCalculator.apply(null);
         System.out.printf("Precio total: $%.2f %n¿Desea confirmar su reserva? (S/N)%n", totalPrice);
 
         if (scanner.nextLine().equalsIgnoreCase("S")) {
             Client client = createClient();
             printClientDetails(client);
 
-            // Crear y agregar la reserva
             Booking booking = new Booking(accommodation, client, details);
             Database.getBookings().add(booking);
 

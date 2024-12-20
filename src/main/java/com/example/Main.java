@@ -13,7 +13,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         IValidatorService validatorService = new ValidatorService(scanner);
         IMenuService menuService = new MenuService(validatorService);
-        BookingService bookingService = new BookingService(database, menuService, new StayService(scanner), new DayPassService(scanner));
+        BookingService bookingService = new BookingService(database, menuService, new StayService(scanner), new DayPassService(scanner), new BookingDeleterService(scanner));
         bookingService.start();
     }
 }
