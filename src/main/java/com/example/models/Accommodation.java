@@ -2,7 +2,7 @@ package com.example.models;
 
 import java.util.List;
 
-public abstract class Accommodation {
+public class Accommodation {
     private String name;
     private Float rate;
     private String city;
@@ -17,6 +17,7 @@ public abstract class Accommodation {
         this.services = services;
     }
 
+
     public String getName() {
         return name;
     }
@@ -25,16 +26,13 @@ public abstract class Accommodation {
         return rate;
     }
 
-
     public String getCity() {
         return city;
     }
 
-
     public String getDescription() {
         return description;
     }
-
 
     public List<Service> getServices() {
         return services;

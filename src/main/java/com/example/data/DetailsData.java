@@ -15,7 +15,6 @@ public class DetailsData {
         this.city = city;
     }
 
-    // Getters
     public LocalDate getStartDate() {
         return startDate;
     }
