@@ -3,21 +3,27 @@ package com.example.models;
 public class Room extends Service {
     private Integer stock;
     private String type;
-    private Float price;
 
     public Room(String name, String description, Integer stock, String type, Float price) {
-        super(name, description);
+        super(name, description, price);
         this.stock = stock;
         this.type = type;
-        this.price = price;
     }
 
     public String getType() {
         return type;
     }
 
-    public Float getPrice() {
-        return price;
+    public Integer getStock() {
+        return stock;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Habitación: %s | Precio: %.2f | Descripción: %s | Tipo: %s | Stock: %d",
+                getName(), getPrice(), getDescription(), getType(), getStock()
+        );
     }
 
 }

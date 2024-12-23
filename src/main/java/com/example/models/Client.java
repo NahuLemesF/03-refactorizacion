@@ -30,6 +30,15 @@ public class Client {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "Nombre: " + firstName + "\n" +
+                "Apellido: " + lastName + "\n" +
+                "Fecha de Nacimiento: " + birthDate + "\n" +
+                "Telefono: " + phoneNumber + "\n" +
+                "Nacionalidad: " + nationality + "\n";
+    };
+
     public String getFirstName() {
         return firstName;
     }

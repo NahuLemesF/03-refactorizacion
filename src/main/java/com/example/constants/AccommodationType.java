@@ -1,9 +1,10 @@
-package com.example.models;
+package com.example.constants;
 
 public enum AccommodationType {
     HOTEL("Hotel"),
     FARM("Finca"),
-    APARTMENT("Apartamento"),;
+    APARTMENT("Apartamento"),
+    DAY_PASS("Día de Sol");
 
     private final String description;
 

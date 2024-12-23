@@ -1,4 +1,4 @@
-package com.example.services;
+package com.example.utils;
 
 import com.example.services.interfaces.IValidatorService;
 
@@ -6,10 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 
-public class ValidatorService implements IValidatorService {
+public class Validator implements IValidatorService {
     private final Scanner scanner;
 
-    public ValidatorService(Scanner scanner) {
+    public Validator(Scanner scanner) {
         this.scanner = scanner;
     }
 
