@@ -21,8 +21,7 @@ public class Stay extends Accommodation {
     }
 
 
-    public Float getBasePrice() { return basePrice; }
-
-    public void setBasePrice(Float basePrice) { this.basePrice = basePrice; }
-
+    public Float getBasePrice() {
+        return basePrice;
+    }
 }

@@ -20,13 +20,7 @@ public class DayPass extends Accommodation {
         );
     }
 
-
-
     public Float getPersonPrice() {
         return personPrice;
-    }
-
-    public void setPersonPrice(Float personPrice) {
-        this.personPrice = personPrice;
     }
 }

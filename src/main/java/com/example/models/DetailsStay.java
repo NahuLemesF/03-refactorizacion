@@ -21,11 +21,4 @@ public class DetailsStay extends Details {
         this.endDate = endDate;
         this.roomsQuantity = roomsQuantity;
     }
-
-
-    public Integer getRoomsQuantity() {
-        return roomsQuantity;
-    }
-
-
 }

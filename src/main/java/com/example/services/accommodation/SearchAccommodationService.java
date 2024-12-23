@@ -1,6 +1,5 @@
 package com.example.services.accommodation;
 
-import com.example.constants.AccommodationType;
 import com.example.models.Accommodation;
 import com.example.models.Stay;
 import com.example.repositories.AccommodationRepository;
@@ -27,12 +26,6 @@ public class SearchAccommodationService {
                 .filter(accommodation -> accommodation instanceof Stay)
                 .map(accommodation -> (Stay) accommodation)
                 .filter(stay -> stay.getCity().equalsIgnoreCase(city))
-                .collect(Collectors.toList());
-    }
-
-    public List<Stay> getStaysByType(List<Stay> stays, AccommodationType type) {
-        return stays.stream()
-                .filter(stay -> stay.getType().equals(type))
                 .collect(Collectors.toList());
     }
 }

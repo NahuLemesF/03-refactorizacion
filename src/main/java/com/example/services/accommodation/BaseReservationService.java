@@ -44,9 +44,4 @@ public abstract class BaseReservationService {
         }
         return item.toString();
     }
-
-
-
-
-
 }

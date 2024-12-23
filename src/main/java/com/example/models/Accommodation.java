@@ -29,12 +29,23 @@ public abstract class Accommodation {
         );
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public String getCity() {
+        return city;
+    }
 
-    public String getName() { return name; }
-    public Float getRate() { return rate; }
-    public String getCity() { return city; }
-    public String getDescription() { return description; }
-    public AccommodationType getType() { return type; }
-    public List<Service> getServices() { return services; }
+    public String getDescription() {
+        return description;
+    }
+
+    public AccommodationType getType() {
+        return type;
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
 }

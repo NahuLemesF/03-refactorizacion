@@ -47,12 +47,4 @@ public class DayPassService extends BaseReservationService {
                 .filter(dayPass -> dayPass.getCity().equalsIgnoreCase(city))
                 .toList();
     }
-
-    public static List<DayPass> getDayPassList() {
-        return dayPassList;
-    }
-
-    public static void setDayPassList(List<DayPass> dayPassList) {
-        DayPassService.dayPassList = dayPassList;
-    }
 }

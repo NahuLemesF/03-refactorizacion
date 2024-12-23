@@ -20,22 +20,27 @@ public class StayService extends BaseReservationService {
 
     public void createStay(String city, AccommodationType type, BookingService bookingService) {
         listStaysFiltered = getFilteredStays(city, type);
+
         if (listStaysFiltered.isEmpty()) {
             System.out.println("No hay estadías disponibles para el tipo seleccionado en esta ciudad.");
             return;
         }
-
         Stay selectedStay = selectStay(listStaysFiltered);
+        Room selectedRoom = getRoomForStay(selectedStay);
 
-        List<Room> rooms = getRoomsFromStay(selectedStay);
-        if (rooms.isEmpty()) {
-            System.out.println("No hay habitaciones disponibles para la estadía seleccionada.");
-            return;
-        }
-
-        Room selectedRoom = selectRoom(rooms);
+        if (selectedRoom == null) return;
 
         bookingService.createBooking(selectedStay, selectedRoom);
+    }
+
+    private Room getRoomForStay(Stay selectedStay) {
+        List<Room> rooms = getRoomsFromStay(selectedStay);
+
+        if (rooms.isEmpty()) {
+            System.out.println("No hay habitaciones disponibles para la estadía seleccionada.");
+            return null;
+        }
+        return selectRoom(rooms);
     }
 
     private List<Stay> getFilteredStays(String city, AccommodationType type) {

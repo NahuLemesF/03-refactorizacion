@@ -12,10 +12,6 @@ public class Booking {
     }
 
 
-    public Client getClient() {
-        return client;
-    }
-
     @Override
     public String toString() {
         return "Alojamiento: " + accommodation + "\n" +
@@ -29,17 +25,5 @@ public class Booking {
 
     public void setAccommodation(Accommodation accommodation) {
         this.accommodation = accommodation;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Details getDetails() {
-        return details;
-    }
-
-    public void setDetails(Details details) {
-        this.details = details;
     }
 }

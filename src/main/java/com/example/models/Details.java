@@ -36,43 +36,15 @@ public class Details {
                 '}';
     }
 
-    public AccommodationType getAccommodationType() {
-        return accommodationType;
-    }
-
-    public void setAccommodationType(AccommodationType accommodationType) {
-        this.accommodationType = accommodationType;
-    }
-
     public Integer getAdultsQuantity() {
         return adultsQuantity;
-    }
-
-    public void setAdultsQuantity(Integer adultsQuantity) {
-        this.adultsQuantity = adultsQuantity;
     }
 
     public Integer getChildrenQuantity() {
         return childrenQuantity;
     }
 
-    public void setChildrenQuantity(Integer childrenQuantity) {
-        this.childrenQuantity = childrenQuantity;
-    }
-
     public String getCity() {
         return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
     }
 }
